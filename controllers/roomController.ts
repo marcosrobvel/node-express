@@ -4,6 +4,7 @@ import { Room } from '../interfaces/roomInterface';
 
 export const getRooms = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const rooms: Room[] = await roomService.getAllRooms();
     res.status(200).json(rooms);
   } catch (error) {
@@ -13,6 +14,7 @@ export const getRooms = async (req: Request, res: Response) => {
       error: process.env.NODE_ENV === 'development' ? error : undefined
     });
   }
+
 };
 
 export const getRoomById = async (req: Request, res: Response) => {
@@ -25,13 +27,13 @@ export const getRoomById = async (req: Request, res: Response) => {
   try {
     const room: Room | null = await roomService.getRoomById(roomId);
     if (room) {
-      res.status(200).json(room);
+      return res.status(200).json(room);
     } else {
-      res.status(404).json({ message: "Habitación no encontrada" });
+      return res.status(404).json({ message: "Habitación no encontrada" });
     }
   } catch (error) {
     console.error(`Error en getRoomById para ID ${roomId}:`, error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       message: "Error interno al obtener la habitación",
       error: process.env.NODE_ENV === 'development' ? error : undefined
     });
@@ -49,20 +51,20 @@ export const createRoom = async (req: Request, res: Response) => {
 
   try {
     const newRoom: Room = await roomService.createRoom(roomData);
-    res.status(201).json(newRoom);
+    return res.status(201).json(newRoom);
   } catch (error) {
     console.error('Error en createRoom:', error);
 
     if (error instanceof Error) {
       const statusCode = error.name === 'ValidationError' ? 400 : 500;
-      res.status(statusCode).json({ 
+      return res.status(statusCode).json({ 
         message: error.name === 'ValidationError' 
           ? error.message 
           : "Error interno al crear la habitación",
         error: process.env.NODE_ENV === 'development' ? error : undefined
       });
     } else {
-      res.status(500).json({ 
+      return res.status(500).json({ 
         message: "Error interno al crear la habitación",
         error: process.env.NODE_ENV === 'development' ? error : undefined
       });
@@ -82,13 +84,13 @@ export const updateRoom = async (req: Request, res: Response) => {
 
   try {
     const updatedRoom = await roomService.updateRoom(id, roomData);
-    res.status(200).json(updatedRoom);
+    return res.status(200).json(updatedRoom);
   } catch (error: any) {
     if (error.message === 'Room not found') {
-      res.status(404).json({ message: 'Habitación no encontrada' });
+      return res.status(404).json({ message: 'Habitación no encontrada' });
     } else {
       
-      res.status(500).json({ message: 'Error interno al actualizar la habitación' });
+      return res.status(500).json({ message: 'Error interno al actualizar la habitación' });
     }
   }
 };

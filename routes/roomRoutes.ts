@@ -13,7 +13,6 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 router.post('/', async (req: Request, res: Response) => {
 	try {
-        console.log("typescript")
 		await roomController.createRoom(req, res);
 	} catch (error) {
 		res.status(500).send({ error: 'Internal Server Error' });

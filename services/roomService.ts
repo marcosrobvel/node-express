@@ -16,7 +16,6 @@ export const getRoomById = async (id: string) => {
 export const createRoom = async (roomData: any) => {
   const rooms = JSON.parse(fs.readFileSync(roomsFilePath, 'utf-8'));
   const newId = (rooms.length > 0 ? parseInt(rooms[rooms.length - 1].id) : 0) + 1;
-  console.log('New ID:', newId); // Debugging line
   roomData.id = newId;
   rooms.push(roomData);
   fs.writeFileSync(roomsFilePath, JSON.stringify(rooms, null, 2));
