@@ -417,15 +417,5 @@
     "price": 741002,
     "offer_price": 28945,
     "status": "available"
-  },
-  {
-    "photo": [],
-    "roomNumber": 31,
-    "roomType": "Double Bed",
-    "amenities": "Fruit - Mango",
-    "price": 4214144,
-    "offer_price": 421452,
-    "status": "available",
-    "id": 31
   }
 ]

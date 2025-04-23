@@ -1,59 +1,73 @@
-import fs from 'fs';
-import path from 'path';
+import { Room } from "../interfaces/roomInterface";
+import { validateRoomData } from "../validators/roomValidator";
+import fs from "fs";
 
-const roomsFilePath = path.join(__dirname, '../data/rooms.json');
+const rooms: Room[] = require("../data/rooms.json");
 
-export const getAllRooms = async () => {
-  const rooms = JSON.parse(fs.readFileSync(roomsFilePath, 'utf-8'));
-  return rooms;
-};
+export class RoomService {
+  private rooms: Room[];
+  private roomsFilePath = "./data/rooms.json";
 
-export const getRoomById = async (id: string) => {
-  const rooms = JSON.parse(fs.readFileSync(roomsFilePath, 'utf-8'));
-  return rooms.find((room: any) => room.id === id);
-};
-
-export const createRoom = async (roomData: any) => {
-  const rooms = JSON.parse(fs.readFileSync(roomsFilePath, 'utf-8'));
-  const newId = (rooms.length > 0 ? parseInt(rooms[rooms.length - 1].id) : 0) + 1;
-  roomData.id = newId;
-  rooms.push(roomData);
-  fs.writeFileSync(roomsFilePath, JSON.stringify(rooms, null, 2));
-  return roomData;
-};
-
-const readRoomsFile = () => {
-  return JSON.parse(fs.readFileSync(roomsFilePath, 'utf-8'));
-};
-
-const writeRoomsFile = (rooms: any) => {
-  fs.writeFileSync(roomsFilePath, JSON.stringify(rooms, null, 2));
-};
-
-export const updateRoom = async (id: string, roomData: any) => {
-  const rooms = readRoomsFile();
-  const roomIndex = rooms.findIndex((room: any) => room.id === id);
-
-  if (roomIndex === -1) {
-    throw new Error('Room not found');
+  constructor() {
+    this.rooms = rooms;
   }
 
-  const updatedRoom = { ...rooms[roomIndex], ...roomData, id };
-  rooms[roomIndex] = updatedRoom;
-
-  writeRoomsFile(rooms);
-  return updatedRoom;
-};
-
-export const deleteRoom = async (id: string) => {
-  const rooms = readRoomsFile();
-  const roomIndex = rooms.findIndex((room: any) => room.id === id);
-
-  if (roomIndex === -1) {
-    throw new Error('Room not found');
+  private writeRoomsFile(rooms: Room[]): void {
+    fs.writeFileSync(this.roomsFilePath, JSON.stringify(rooms, null, 2));
   }
 
-  const [deletedRoom] = rooms.splice(roomIndex, 1);
-  writeRoomsFile(rooms);
-  return deletedRoom;
-};
+  public getAllRooms(): Room[] {
+    return this.rooms;
+  }
+
+  public getRoomById(id: number): Room | undefined {
+    return this.rooms.find((room) => room.id === id);
+  }
+
+  public createRoom(roomData: Omit<Room, "id">): Room {
+    validateRoomData(roomData);
+
+    const newId =
+      this.rooms.length > 0 ? this.rooms[this.rooms.length - 1].id + 1 : 1;
+
+    const newRoom: Room = { id: newId, ...roomData };
+
+    this.rooms.push(newRoom);
+
+    this.writeRoomsFile(this.rooms);
+
+    return newRoom;
+  }
+
+  public updateRoom(id: number, roomData: Partial<Omit<Room, "id">>): Room {
+    const roomIndex = this.rooms.findIndex((room) => room.id === id);
+
+    if (roomIndex === -1) {
+      throw new Error("Room not found");
+    }
+
+    validateRoomData(roomData as Omit<Room, "id">);
+
+    const updatedRoom: Room = { ...this.rooms[roomIndex], ...roomData };
+
+    this.rooms[roomIndex] = updatedRoom;
+
+    this.writeRoomsFile(this.rooms);
+
+    return updatedRoom;
+  }
+
+  public deleteRoom(id: number): Room {
+    const roomIndex = this.rooms.findIndex((room) => room.id === id);
+
+    if (roomIndex === -1) {
+      throw new Error("Room not found");
+    }
+
+    const [deletedRoom] = this.rooms.splice(roomIndex, 1);
+
+    this.writeRoomsFile(this.rooms);
+
+    return deletedRoom;
+  }
+}

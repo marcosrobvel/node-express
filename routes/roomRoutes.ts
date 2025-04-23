@@ -4,6 +4,7 @@ import * as roomController from '../controllers/roomController';
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => roomController.getRooms(req, res));
+
 router.get('/:id', async (req: Request, res: Response) => {
 	try {
 		await roomController.getRoomById(req, res);
@@ -11,6 +12,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 		res.status(500).send({ error: 'Internal Server Error' });
 	}
 });
+
 router.post('/', async (req: Request, res: Response) => {
 	try {
 		await roomController.createRoom(req, res);

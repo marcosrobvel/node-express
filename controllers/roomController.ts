@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
-import * as roomService from '../services/roomService';
+import { RoomService } from '../services/roomService';
 import { Room } from '../interfaces/roomInterface';
+
+const roomService = new RoomService();
 
 export const getRooms = async (req: Request, res: Response) => {
   try {
@@ -25,7 +27,7 @@ export const getRoomById = async (req: Request, res: Response) => {
   }
 
   try {
-    const room: Room | null = await roomService.getRoomById(roomId);
+    const room : Room | undefined = await roomService.getRoomById(Number(roomId));
     if (room) {
       return res.status(200).json(room);
     } else {
@@ -50,7 +52,7 @@ export const createRoom = async (req: Request, res: Response) => {
   }
 
   try {
-    const newRoom: Room = await roomService.createRoom(roomData);
+    const newRoom: Room = await roomService.createRoom(roomData as Omit<Room, 'id'>);
     return res.status(201).json(newRoom);
   } catch (error) {
     console.error('Error en createRoom:', error);
@@ -83,7 +85,7 @@ export const updateRoom = async (req: Request, res: Response) => {
   }
 
   try {
-    const updatedRoom = await roomService.updateRoom(id, roomData);
+    const updatedRoom = await roomService.updateRoom(Number(id), roomData);
     return res.status(200).json(updatedRoom);
   } catch (error: any) {
     if (error.message === 'Room not found') {
@@ -99,7 +101,7 @@ export const deleteRoom = async (req: Request, res: Response) => {
   const { id } = req.params;
   console.log("ID recibido para eliminar:", id);
   try {
-    const deletedRoom = await roomService.deleteRoom(id);
+    const deletedRoom = await roomService.deleteRoom(Number(id));
     res.status(200).json(deletedRoom);
   } catch (error: any) {
     if (error.message === 'Room not found') {
