@@ -20,7 +20,7 @@ export const login = (req: Request, res: Response): void => {
     res.status(401).json({ message: 'Credenciales incorrectas' });
   }
 
-  const token = jwt.sign({ username }, process.env.SECRET_KEY as string, { expiresIn: '1h' });
+  const token = jwt.sign({ username }, process.env.SECRET_KEY as string, { expiresIn: '4h' });
 
   res.json({ token });
 };
