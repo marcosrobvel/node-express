@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import { authenticateToken } from './middleware/authMiddleware';
 import bookingRoutes from './routes/bookingRoutes';
 import http from 'http';
+import { connectToMongo } from './database/mongoConnection';
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use('/api/bookings', authenticateToken, bookingRoutes);
 
 const PORT = 3000;
 const server = http.createServer(app);
+
+connectToMongo();
 
 function startServer(port: number) {
     server.listen(port, () => {
