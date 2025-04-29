@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
 
-app.use('/api/rooms', roomRoutes);
+app.use('/api/rooms', authenticateToken, roomRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
-app.use('/api/bookings', bookingRoutes);
+app.use('/api/bookings', authenticateToken, bookingRoutes);
 
 const PORT = 3000;
 const server = http.createServer(app);
