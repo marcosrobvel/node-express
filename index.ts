@@ -5,8 +5,9 @@ import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import { authenticateToken } from './middleware/authMiddleware';
 import bookingRoutes from './routes/bookingRoutes';
-import http from 'http';
+//import http from 'http';
 import { connectToMongo } from './database/mongoConnection';
+import serverless from 'serverless-http';
 
 const app = express();
 
@@ -17,12 +18,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/rooms', authenticateToken, roomRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 app.use('/api/bookings', authenticateToken, bookingRoutes);
-
+/*
 const PORT = 3000;
-const server = http.createServer(app);
+const server = http.createServer(app);*/
 
 connectToMongo();
-
+/*
 function startServer(port: number) {
     server.listen(port, () => {
         console.log(`Servidor corriendo en http://localhost:${port}`);
@@ -44,4 +45,5 @@ process.on('SIGINT', () => {
     });
 });
 
-startServer(PORT);
+startServer(PORT);*/
+export const handler = serverless(app);

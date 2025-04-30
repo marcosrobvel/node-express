@@ -3,11 +3,6 @@ import { Room } from '../interfaces/roomInterface';
 
 const roomSchema = new Schema<Room>(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     photo: {
       type: [String],
       required: true,

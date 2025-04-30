@@ -2,6 +2,21 @@ import { Room } from "../interfaces/roomInterface";
 import { validateRoomData } from "../validators/roomValidator";
 import fs from "fs";
 
+
+/*
+Ejemplo de implementar MongoDB en vez de un archivo JSON:
+import { RoomModel } from "../models/roomModel";
+import { Room } from "../interfaces/roomInterface";
+import { validateRoomData } from "../validators/roomValidator";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
+const MONGO_URI = process.env.MONGO_URI as string;
+
+
+*/
+
 const rooms: Room[] = require("../data/rooms.json");
 
 export class RoomService {
