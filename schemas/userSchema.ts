@@ -3,11 +3,6 @@ import { User } from '../interfaces/userInterface';
 
 const userSchema = new Schema<User>(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     photo: {
       type: String,
       required: true,
