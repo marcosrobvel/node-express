@@ -1,88 +1,69 @@
 import { Room } from "../interfaces/roomInterface";
 import { validateRoomData } from "../validators/roomValidator";
-import fs from "fs";
-
-
-/*
-Ejemplo de implementar MongoDB en vez de un archivo JSON:
-import { RoomModel } from "../models/roomModel";
-import { Room } from "../interfaces/roomInterface";
-import { validateRoomData } from "../validators/roomValidator";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-
-dotenv.config();
-const MONGO_URI = process.env.MONGO_URI as string;
-
-
-*/
-
-const rooms: Room[] = require("../data/rooms.json");
+import RoomModel from "../schemas/roomSchema";
 
 export class RoomService {
-  private rooms: Room[];
-  private roomsFilePath = "./data/rooms.json";
-
-  constructor() {
-    this.rooms = rooms;
+  public async getAllRooms(): Promise<Room[]> {
+    const rooms = await RoomModel.find().lean();
+    return rooms.map((room) => ({
+      ...room,
+      id: Number(room.id),
+    }));
   }
 
-  private writeRoomsFile(rooms: Room[]): void {
-    fs.writeFileSync(this.roomsFilePath, JSON.stringify(rooms, null, 2));
+  public async getRoomById(id: number): Promise<Room | null> {
+    const room = await RoomModel.findOne({ id }).lean();
+    return room ? { 
+      ...room,
+      id: Number(room.id) 
+    } : null;
   }
 
-  public getAllRooms(): Room[] {
-    return this.rooms;
-  }
-
-  public getRoomById(id: number): Room | undefined {
-    return this.rooms.find((room) => room.id === id);
-  }
-
-  public createRoom(roomData: Omit<Room, "id">): Room {
+  public async createRoom(roomData: Omit<Room, "id">): Promise<Room> {
     validateRoomData(roomData);
 
-    const newId =
-      this.rooms.length > 0 ? this.rooms[this.rooms.length - 1].id + 1 : 1;
+    const lastRoom = await RoomModel.findOne().sort({ id: -1 }).limit(1);
+    const newId = lastRoom ? Number(lastRoom.id) + 1 : 1;
 
-    const newRoom: Room = { id: newId, ...roomData };
+    const newRoom = new RoomModel({
+      ...roomData,
+      id: newId,
+    });
 
-    this.rooms.push(newRoom);
-
-    this.writeRoomsFile(this.rooms);
-
-    return newRoom;
+    const savedRoom = await newRoom.save();
+    return { 
+      ...savedRoom.toObject(), 
+      id: Number(savedRoom.id)
+    };
   }
 
-  public updateRoom(id: number, roomData: Partial<Omit<Room, "id">>): Room {
-    const roomIndex = this.rooms.findIndex((room) => room.id === id);
-
-    if (roomIndex === -1) {
-      throw new Error("Room not found");
-    }
-
+  public async updateRoom(
+    id: number,
+    roomData: Partial<Omit<Room, "id">>
+  ): Promise<Room> {
     validateRoomData(roomData as Omit<Room, "id">);
+    const updatedRoom = await RoomModel.findOneAndUpdate(
+      { id },
+      roomData,
+      { new: true }
+    ).lean();
 
-    const updatedRoom: Room = { ...this.rooms[roomIndex], ...roomData };
+    if (!updatedRoom) throw new Error("Room not found");
 
-    this.rooms[roomIndex] = updatedRoom;
-
-    this.writeRoomsFile(this.rooms);
-
-    return updatedRoom;
+    return { 
+      ...updatedRoom, 
+      id: Number(updatedRoom.id)
+    };
   }
 
-  public deleteRoom(id: number): Room {
-    const roomIndex = this.rooms.findIndex((room) => room.id === id);
+  public async deleteRoom(id: number): Promise<Room> {
+    const deletedRoom = await RoomModel.findOneAndDelete({ id }).lean();
 
-    if (roomIndex === -1) {
-      throw new Error("Room not found");
-    }
+    if (!deletedRoom) throw new Error("Room not found");
 
-    const [deletedRoom] = this.rooms.splice(roomIndex, 1);
-
-    this.writeRoomsFile(this.rooms);
-
-    return deletedRoom;
+    return { 
+      ...deletedRoom, 
+      id: Number(deletedRoom.id)
+    };
   }
 }

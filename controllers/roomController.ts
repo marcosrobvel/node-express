@@ -27,7 +27,7 @@ export const getRoomById = async (req: Request, res: Response) => {
   }
 
   try {
-    const room : Room | undefined = await roomService.getRoomById(Number(roomId));
+    const room: Room | null = await roomService.getRoomById(Number(roomId));
     if (room) {
       return res.status(200).json(room);
     } else {

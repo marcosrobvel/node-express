@@ -1,73 +1,69 @@
 import { User } from "../interfaces/userInterface";
 import { validateUserData } from "../validators/userValidator";
-import fs from "fs";
-
-const users: User[] = require("../data/users.json");
+import UserModel from "../schemas/userSchema";
 
 export class UserService {
-  private users: User[];
-  private usersFilePath = "./data/users.json";
-
-  constructor() {
-    this.users = users;
+  public async getAllUsers(): Promise<User[]> {
+    const users = await UserModel.find().lean();
+    return users.map((user) => ({
+      ...user,
+      id: Number(user.id),
+    }));
   }
 
-  private writeUsersFile(users: User[]): void {
-    fs.writeFileSync(this.usersFilePath, JSON.stringify(users, null, 2));
+  public async getUserById(id: number): Promise<User | null> {
+    const user = await UserModel.findOne({ id }).lean();
+    return user ? { 
+      ...user,
+      id: Number(user.id) 
+    } : null;
   }
 
-  public getAllUsers(): User[] {
-    return this.users;
-  }
-
-  public getUserById(id: number): User | undefined {
-    return this.users.find((user) => user.id === id);
-  }
-
-  public createUser(userData: Omit<User, "id">): User {
+  public async createUser(userData: Omit<User, "id">): Promise<User> {
     validateUserData(userData);
 
-    const newId =
-      this.users.length > 0 ? this.users[this.users.length - 1].id + 1 : 1;
+    const lastUser = await UserModel.findOne().sort({ id: -1 }).limit(1);
+    const newId = lastUser ? Number(lastUser.id) + 1 : 1;
 
-    const newUser: User = { id: newId, ...userData };
+    const newUser = new UserModel({
+      ...userData,
+      id: newId,
+    });
 
-    this.users.push(newUser);
-
-    this.writeUsersFile(this.users);
-
-    return newUser;
+    const savedUser = await newUser.save();
+    return { 
+      ...savedUser.toObject(), 
+      id: Number(savedUser.id)
+    };
   }
 
-  public updateUser(id: number, userData: Partial<Omit<User, "id">>): User {
-    const userIndex = this.users.findIndex((user) => user.id === id);
-
-    if (userIndex === -1) {
-      throw new Error("User not found");
-    }
-
+  public async updateUser(
+    id: number,
+    userData: Partial<Omit<User, "id">>
+  ): Promise<User> {
     validateUserData(userData as Omit<User, "id">);
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { id },
+      userData,
+      { new: true }
+    ).lean();
 
-    const updatedUser: User = { ...this.users[userIndex], ...userData };
+    if (!updatedUser) throw new Error("User not found");
 
-    this.users[userIndex] = updatedUser;
-
-    this.writeUsersFile(this.users);
-
-    return updatedUser;
+    return { 
+      ...updatedUser, 
+      id: Number(updatedUser.id)
+    };
   }
 
-  public deleteUser(id: number): User {
-    const userIndex = this.users.findIndex((user) => user.id === id);
+  public async deleteUser(id: number): Promise<User> {
+    const deletedUser = await UserModel.findOneAndDelete({ id }).lean();
 
-    if (userIndex === -1) {
-      throw new Error("User not found");
-    }
+    if (!deletedUser) throw new Error("User not found");
 
-    const [deletedUser] = this.users.splice(userIndex, 1);
-
-    this.writeUsersFile(this.users);
-
-    return deletedUser;
+    return { 
+      ...deletedUser, 
+      id: Number(deletedUser.id)
+    };
   }
 }

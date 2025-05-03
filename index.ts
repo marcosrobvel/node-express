@@ -46,4 +46,5 @@ process.on('SIGINT', () => {
 });
 
 startServer(PORT);*/
+app.listen(3000);
 export const handler = serverless(app);

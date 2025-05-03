@@ -1,86 +1,94 @@
 import { Booking } from "../interfaces/bookingInterface";
 import { validateBooking } from "../validators/bookingValidator";
-import fs from "fs";
-
-const bookings: Booking[] = require("../data/bookings.json");
+import BookingModel from "../schemas/bookingSchema";
 
 export class BookingService {
-  private bookings: Booking[];
-  private bookingsFilePath = "./data/bookings.json";
-
-  constructor() {
-    this.bookings = bookings;
+  public async getAllBookings(): Promise<Booking[]> {
+    const bookings = await BookingModel.find().lean<Booking[]>();
+    return bookings.map((booking: Booking) => ({
+      ...booking,
+      id: Number(booking.id),
+      special: booking.special || null,
+      photo: booking.photo || [],
+    }));
   }
 
-  private writeBookingsFile(bookings: Booking[]): void {
-    fs.writeFileSync(this.bookingsFilePath, JSON.stringify(bookings, null, 2));
+  public async getBookingById(id: number): Promise<Booking | null> {
+    const booking = await BookingModel.findOne({ id }).lean();
+    return booking
+      ? {
+          ...booking,
+          id: Number(booking.id),
+          special: booking.special || null,
+          photo: booking.photo || [],
+        }
+      : null;
   }
 
-  public getAllBookings(): Booking[] {
-    return this.bookings;
-  }
-
-  public getBookingById(id: number): Booking | undefined {
-    return this.bookings.find((booking) => booking.id === id);
-  }
-
-  public createBooking(bookingData: Omit<Booking, "id">): Booking {
+  public async createBooking(
+    bookingData: Omit<Booking, "id">
+  ): Promise<Booking> {
     validateBooking({ id: 0, ...bookingData });
 
-    const newId = 
-      this.bookings.length > 0 
-        ? Math.max(...this.bookings.map(b => b.id)) + 1 
-        : 1;
+    const lastBooking = await BookingModel.findOne().sort({ id: -1 }).limit(1);
+    const newId = lastBooking ? Number(lastBooking.id) + 1 : 1;
 
-    const newBooking: Booking = { 
-      id: newId, 
+    const newBooking = new BookingModel({
       ...bookingData,
+      id: newId,
       special: bookingData.special || null,
-      photo: bookingData.photo || []
+      photo: bookingData.photo || [],
+    });
+
+    const savedBooking = await newBooking.save();
+    return {
+      ...savedBooking.toObject(),
+      id: Number(savedBooking.id),
     };
-
-    this.bookings.push(newBooking);
-    this.writeBookingsFile(this.bookings);
-
-    return newBooking;
   }
 
-  public updateBooking(id: number, bookingData: Partial<Omit<Booking, "id">>): Booking {
-    const bookingIndex = this.bookings.findIndex((booking) => booking.id === id);
+  public async updateBooking(
+    id: number,
+    bookingData: Partial<Omit<Booking, "id">>
+  ): Promise<Booking> {
+    const existingBooking = await BookingModel.findOne({ id }).lean();
+    if (!existingBooking) throw new Error("Booking not found");
 
-    if (bookingIndex === -1) {
-      throw new Error("Booking not found");
-    }
-
-    if (bookingData.roomType || bookingData.bookStatus || bookingData.checkIn || bookingData.checkOut) {
+    if (
+      bookingData.roomType ||
+      bookingData.bookStatus ||
+      bookingData.checkIn ||
+      bookingData.checkOut
+    ) {
       validateBooking({
-        ...this.bookings[bookingIndex],
+        ...existingBooking,
         ...bookingData,
-        id: this.bookings[bookingIndex].id
+        id: existingBooking.id,
       });
     }
 
-    const updatedBooking: Booking = { 
-      ...this.bookings[bookingIndex], 
-      ...bookingData 
+    const updatedBooking = await BookingModel.findOneAndUpdate(
+      { id },
+      bookingData,
+      { new: true }
+    ).lean();
+
+    if (!updatedBooking) throw new Error("Booking not found");
+
+    return {
+      ...updatedBooking,
+      id: Number(updatedBooking.id),
     };
-
-    this.bookings[bookingIndex] = updatedBooking;
-    this.writeBookingsFile(this.bookings);
-
-    return updatedBooking;
   }
 
-  public deleteBooking(id: number): Booking {
-    const bookingIndex = this.bookings.findIndex((booking) => booking.id === id);
+  public async deleteBooking(id: number): Promise<Booking> {
+    const deletedBooking = await BookingModel.findOneAndDelete({ id }).lean();
 
-    if (bookingIndex === -1) {
-      throw new Error("Booking not found");
-    }
+    if (!deletedBooking) throw new Error("Booking not found");
 
-    const [deletedBooking] = this.bookings.splice(bookingIndex, 1);
-    this.writeBookingsFile(this.bookings);
-
-    return deletedBooking;
+    return {
+      ...deletedBooking,
+      id: Number(deletedBooking.id),
+    };
   }
 }

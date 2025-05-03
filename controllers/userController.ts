@@ -26,7 +26,7 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 
   try {
-    const user: User | undefined = await userService.getUserById(Number(userId));
+    const user: User | null = await userService.getUserById(Number(userId));
     if (user) {
       return res.status(200).json(user);
     } else {

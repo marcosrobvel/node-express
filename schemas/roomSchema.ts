@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { Room } from '../interfaces/roomInterface'; 
+import { Schema, model } from "mongoose";
+import { Room } from "../interfaces/roomInterface";
 
 const roomSchema = new Schema<Room>(
   {
@@ -30,7 +30,7 @@ const roomSchema = new Schema<Room>(
     },
     status: {
       type: String,
-      enum: ['available', 'booked'],
+      enum: ["available", "booked"],
       required: true,
     },
   },
@@ -39,4 +39,4 @@ const roomSchema = new Schema<Room>(
   }
 );
 
-export const RoomModel = model<Room>('Room', roomSchema);
+export default model<Room>("Room", roomSchema);
