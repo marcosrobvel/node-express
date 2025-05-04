@@ -3,9 +3,9 @@ import bodyParser from 'body-parser';
 import roomRoutes from './routes/roomRoutes';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import contactRoutes from './routes/contactRoutes';
 import { authenticateToken } from './middleware/authMiddleware';
 import bookingRoutes from './routes/bookingRoutes';
-//import http from 'http';
 import { connectToMongo } from './database/mongoConnection';
 import serverless from 'serverless-http';
 
@@ -18,11 +18,19 @@ app.use('/api/auth', authRoutes);
 app.use('/api/rooms', authenticateToken, roomRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 app.use('/api/bookings', authenticateToken, bookingRoutes);
+app.use('/api/contacts', authenticateToken, contactRoutes);
+
+connectToMongo();
+
+app.listen(3000);
+export const handler = serverless(app);
+
+//import http from 'http';
+
 /*
 const PORT = 3000;
 const server = http.createServer(app);*/
 
-connectToMongo();
 /*
 function startServer(port: number) {
     server.listen(port, () => {
@@ -46,5 +54,3 @@ process.on('SIGINT', () => {
 });
 
 startServer(PORT);*/
-app.listen(3000);
-export const handler = serverless(app);
