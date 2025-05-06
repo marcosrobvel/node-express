@@ -8,13 +8,24 @@ import { authenticateToken } from './middleware/authMiddleware';
 import bookingRoutes from './routes/bookingRoutes';
 import { connectToMongo } from './database/mongoConnection';
 import serverless from 'serverless-http';
+import cors from 'cors';
 
 const app = express();
+const PORT = process.env.PORT || 3001;
+
+const allowedOrigins = ['http://localhost:3000']
+
+const corsOptions = {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    }
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoutes);
-
 app.use('/api/rooms', authenticateToken, roomRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
 app.use('/api/bookings', authenticateToken, bookingRoutes);
@@ -22,7 +33,12 @@ app.use('/api/contacts', authenticateToken, contactRoutes);
 
 connectToMongo();
 
-app.listen(3000);
+if(process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+    });
+}
+
 export const handler = serverless(app);
 
 //import http from 'http';
