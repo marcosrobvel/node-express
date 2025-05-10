@@ -3,7 +3,7 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon",
-    "start": "node index.js",
+    "start": "node dist/index.js",
     "build": "tsc",
     "tsc": "tsc",
     "seed": "ts-node seed.ts"
