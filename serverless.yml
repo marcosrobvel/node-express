@@ -26,9 +26,6 @@ provider:
         - Content-Type
         - Authorization
       allowCredentials: true
-  environment:
-      SECRET_KEY: ${env:SECRET_KEY}
-      MONGO_URI: ${env:MONGO_URI}
 
 functions:
   app:
