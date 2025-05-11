@@ -28,6 +28,9 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
+app.use('/api/health', (req, res) => {
+    res.status(200).json({ message: 'API is running' });
+});
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', authenticateToken, roomRoutes);
 app.use('/api/users', authenticateToken, userRoutes);
@@ -36,7 +39,7 @@ app.use('/api/contacts', authenticateToken, contactRoutes);
 
 connectToMongo();
 
-if(process.env.NODE_ENV !== 'Authorization') {
+if(process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
     });
