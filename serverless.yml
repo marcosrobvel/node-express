@@ -1,7 +1,5 @@
 service: miranda-backend
-
 frameworkVersion: "3"
-
 package:
   patterns:
     - "!./**"
@@ -10,11 +8,24 @@ package:
     - "dist/**"
     - "data/**"
     - "public/**"
-
 provider:
   name: aws
   region: eu-west-3
   runtime: nodejs18.x
+  httpApi:
+    cors:
+      allowedOrigins:
+        - "http://miranda-frontend.s3-website.eu-west-3.amazonaws.com"
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowCredentials: true
   environment:
       SECRET_KEY: ${env:SECRET_KEY}
       MONGO_URI: ${env:MONGO_URI}
@@ -31,3 +42,6 @@ functions:
           path: /{proxy+}
           method: ANY
           cors: true
+
+
+

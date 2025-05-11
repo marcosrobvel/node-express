@@ -13,7 +13,7 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const allowedOrigins = ['https://upeur2neoi.execute-api.eu-west-3.amazonaws.com']
+const allowedOrigins = ['http://miranda-frontend.s3-website.eu-west-3.amazonaws.com']
 
 // https://upeur2neoi.execute-api.eu-west-3.amazonaws.com/dev
 
@@ -28,7 +28,7 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
-app.use('/api/health', (req, res) => {
+app.use('/api/health', (_, res) => {
     res.status(200).json({ message: 'API is running' });
 });
 app.use('/api/auth', authRoutes);
