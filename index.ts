@@ -13,14 +13,14 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const allowedOrigins = ['https://upeur2neoi.execute-api.eu-west-3.amazonaws.com/dev/']
+const allowedOrigins = ['https://upeur2neoi.execute-api.eu-west-3.amazonaws.com']
 
-// https://upeur2neoi.execute-api.eu-west-3.amazonaws.com/dev/
+// https://upeur2neoi.execute-api.eu-west-3.amazonaws.com/dev
 
 const corsOptions = {
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
     credentials: true,
     }
 
@@ -36,7 +36,7 @@ app.use('/api/contacts', authenticateToken, contactRoutes);
 
 connectToMongo();
 
-if(process.env.NODE_ENV !== 'test') {
+if(process.env.NODE_ENV !== 'Authorization') {
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
     });

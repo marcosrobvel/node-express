@@ -22,5 +22,10 @@ export const login = (req: Request, res: Response): void => {
 
   const token = jwt.sign({ username }, process.env.SECRET_KEY as string, { expiresIn: '4h' });
 
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      username,
+    },
+  });
 };
