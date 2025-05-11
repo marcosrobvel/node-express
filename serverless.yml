@@ -15,6 +15,9 @@ provider:
   name: aws
   region: eu-west-3
   runtime: nodejs18.x
+  environment:
+      SECRET_KEY: ${env:SECRET_KEY}
+      MONGO_URI: ${env:MONGO_URI}
 
 functions:
   app:
