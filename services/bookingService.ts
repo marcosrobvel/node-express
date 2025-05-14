@@ -2,14 +2,23 @@ import { Booking } from "../interfaces/bookingInterface";
 import { validateBooking } from "../validators/bookingValidator";
 import BookingModel from "../schemas/bookingSchema";
 
+
 export class BookingService {
   public async getAllBookings(): Promise<Booking[]> {
-    const bookings = await BookingModel.find().lean<Booking[]>();
-    return bookings.map((booking: Booking) => ({
-      ...booking,
-      id: Number(booking.id),
-      special: booking.special || null,
-      photo: booking.photo || [],
+    const bookings = await BookingModel.find();
+
+    return bookings.map((booking) => ({
+      ...booking.toObject(),
+      id: Number(booking.id || booking._id),
+      special: booking.special ?? null,
+      photo: booking.photo ?? [],
+      guest: booking.guest ?? "",
+      orderDate: booking.orderDate ?? "",
+      checkIn: booking.checkIn ?? "",
+      checkOut: booking.checkOut ?? "",
+      roomType: booking.roomType ?? "Single Bed",
+      roomNumber: booking.roomNumber ?? 0,
+      bookStatus: booking.bookStatus ?? "in",
     }));
   }
 

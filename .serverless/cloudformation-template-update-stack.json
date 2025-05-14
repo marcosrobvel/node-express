@@ -180,6 +180,7 @@
         "AppLogGroup"
       ]
     },
+    "AppLambdaVersionu0JH1wSRNPOZbn7uuQ5fXE3L4Y8Fzlg9BIdT6ttY7nc": {
     "AppLambdaVersionzLsU8XAdVo5EVjsg1EyAMRq1nuTn6OG46CqmtxOwNg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
@@ -187,6 +188,7 @@
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
+        "CodeSha256": "Me0A3axJYWIkyBR458Y0JmI+7snfF+9o30xwPYwHMvw="
         "CodeSha256": "40N/5qi63p/mSL7VQU2xbGx7/Bwy/iATpUTenWCRVpw="
       }
     },
@@ -406,6 +408,7 @@
       ]
     },
     "ApiGatewayDeployment1746972120337": {
+    "ApiGatewayDeployment1747227190296": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -470,6 +473,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
+        "Ref": "AppLambdaVersionu0JH1wSRNPOZbn7uuQ5fXE3L4Y8Fzlg9BIdT6ttY7nc"
         "Ref": "AppLambdaVersionzLsU8XAdVo5EVjsg1EyAMRq1nuTn6OG46CqmtxOwNg"
       },
       "Export": {
