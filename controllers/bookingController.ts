@@ -13,7 +13,7 @@ export const getAllBookings = async (req: Request, res: Response): Promise<void>
         console.error('Error en getAllBookings:', error);
         res.status(500).json({ 
             message: "Error interno al obtener las reservas",
-            error: process.env.NODE_ENV === 'development' ? error : undefined
+            error: process.env.NODE_ENV === 'production' ? error : undefined
         });
     }
 };
