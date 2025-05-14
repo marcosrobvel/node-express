@@ -10,6 +10,13 @@ export class BookingService {
       id: Number(booking.id),
       special: booking.special || null,
       photo: booking.photo || [],
+      guest: booking.guest || "",
+      orderDate: booking.orderDate || "",
+      checkIn: booking.checkIn || "",
+      checkOut: booking.checkOut || "",
+      roomType: booking.roomType || "Single Bed",
+      roomNumber: booking.roomNumber || 0,
+      bookStatus: booking.bookStatus || "in",
     }));
   }
 
