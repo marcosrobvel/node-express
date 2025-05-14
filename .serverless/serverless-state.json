@@ -193,7 +193,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/miranda-backend/dev/1747227481030-2025-05-14T12:58:01.030Z/miranda-backend.zip"
+                "S3Key": "serverless/miranda-backend/dev/1747227649728-2025-05-14T13:00:49.728Z/miranda-backend.zip"
               },
               "Handler": "dist/index.handler",
               "Runtime": "nodejs18.x",
@@ -436,7 +436,7 @@
               "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1747227478386": {
+          "ApiGatewayDeployment1747227647422": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -698,7 +698,7 @@
         ],
         "artifactsS3KeyDirname": "serverless/miranda-backend/dev/code-artifacts",
         "artifact": "C:\\Users\\marcosrobvel\\Desktop\\Curso_OXYGEN\\APUNTES_OXYGEN\\MÓDULO_4\\node-rooms-csv\\.serverless\\miranda-backend.zip",
-        "artifactDirectoryName": "serverless/miranda-backend/dev/1747227481030-2025-05-14T12:58:01.030Z"
+        "artifactDirectoryName": "serverless/miranda-backend/dev/1747227649728-2025-05-14T13:00:49.728Z"
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -712,7 +712,7 @@
     "artifact": "C:\\Users\\marcosrobvel\\Desktop\\Curso_OXYGEN\\APUNTES_OXYGEN\\MÓDULO_4\\node-rooms-csv\\.serverless\\miranda-backend.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/miranda-backend/dev/1747227481030-2025-05-14T12:58:01.030Z",
+    "artifactDirectoryName": "serverless/miranda-backend/dev/1747227649728-2025-05-14T13:00:49.728Z",
     "artifact": "miranda-backend.zip"
   }
 }
