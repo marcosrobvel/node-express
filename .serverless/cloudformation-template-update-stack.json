@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/miranda-backend/dev/1747231399139-2025-05-14T14:03:19.139Z/miranda-backend.zip"
+          "S3Key": "serverless/miranda-backend/dev/1747315357588-2025-05-15T13:22:37.588Z/miranda-backend.zip"
         },
         "Handler": "dist/index.handler",
         "Runtime": "nodejs18.x",
@@ -180,14 +180,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionOofb9FLXxiZfIfeKL5zWjVfgqe7qbdvp6KizQRcL8M": {
+    "AppLambdaVersionN4vmndWj0dWlpgbz0hAzKH0OVjmJtx5LKZ7okjlpHbk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "vGrELZqzlzh/U9G/t9GTBhYETIyWToYqsMmYPNn5G68="
+        "CodeSha256": "F49khiphZ9K65FNUU9SvNTpVOGUW471DgXnDSa2uxlQ="
       }
     },
     "ApiGatewayRestApi": {
@@ -405,7 +405,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1747231396802": {
+    "ApiGatewayDeployment1747315354770": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -470,7 +470,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionOofb9FLXxiZfIfeKL5zWjVfgqe7qbdvp6KizQRcL8M"
+        "Ref": "AppLambdaVersionN4vmndWj0dWlpgbz0hAzKH0OVjmJtx5LKZ7okjlpHbk"
       },
       "Export": {
         "Name": "sls-miranda-backend-dev-AppLambdaFunctionQualifiedArn"
