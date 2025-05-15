@@ -4,9 +4,8 @@ import { Booking } from '../interfaces/bookingInterface';
 
 const bookingService = new BookingService();
 
-export const getAllBookings = async (req: Request, res: Response): Promise<void> => {
+export const getAllBookings = async (_: Request, res: Response): Promise<void> => {
     try {
-      console.log(req.body);
         const bookings: Booking[] = await bookingService.getAllBookings();
         res.status(200).json(bookings);
     } catch (error) {

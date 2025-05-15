@@ -3,6 +3,11 @@ import { Booking } from '../interfaces/bookingInterface';
 
 const bookingSchema = new Schema<Booking>(
   {
+    id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
     guest: {
       type: String,
       required: true,

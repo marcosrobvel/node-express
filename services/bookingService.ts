@@ -9,7 +9,7 @@ export class BookingService {
 
     return bookings.map((booking) => ({
       ...booking.toObject(),
-      id: Number(booking.id || booking._id),
+      id: booking.id,
       special: booking.special ?? null,
       photo: booking.photo ?? [],
       guest: booking.guest ?? "",
