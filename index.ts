@@ -13,23 +13,23 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const allowedOrigins = ['http://miranda-frontend.s3-website.eu-west-3.amazonaws.com'];
+// const allowedOrigins = ['http://miranda-frontend.s3-website.eu-west-3.amazonaws.com'];
 
 // https://upeur2neoi.execute-api.eu-west-3.amazonaws.com/dev
 
-const corsOptions = {
+/*const corsOptions = {
     origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
     credentials: true,
-    }
+    }*/
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use((_, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
+  res.setHeader('Access-Control-Allow-Origin', 'http://miranda-frontend.s3-website.eu-west-3.amazonaws.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
