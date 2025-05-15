@@ -5,7 +5,7 @@ import BookingModel from "../schemas/bookingSchema";
 
 export class BookingService {
   public async getAllBookings(): Promise<Booking[]> {
-    const bookings = await BookingModel.find({}).sort({ id: -1 });
+    const bookings = await BookingModel.find({}).sort({ id: 1 });
 
     return bookings.map((booking) => ({
       ...booking.toObject(),
