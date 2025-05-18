@@ -38,7 +38,11 @@ functions:
       - http:
           path: /
           method: ANY
-          cors: true
+          cors: 
+            origin:
+                - http://localhost:5173
+                - http://miranda-frontend.s3-website.eu-west-3.amazonaws.com
+            credentials: true
       - http:
           path: /{proxy+}
           method: ANY

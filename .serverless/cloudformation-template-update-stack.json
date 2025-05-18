@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/miranda-backend/dev/1747320294548-2025-05-15T14:44:54.548Z/miranda-backend.zip"
+          "S3Key": "serverless/miranda-backend/dev/1747383158717-2025-05-16T08:12:38.717Z/miranda-backend.zip"
         },
         "Handler": "dist/index.handler",
         "Runtime": "nodejs18.x",
@@ -180,14 +180,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionybx6cUIlwBtvratojfXrK19q1ZE7urDGvxYOLdGEt8": {
+    "AppLambdaVersionFpcxVj2TvqoWMwJPNr4jf44nlthLCbzlBlLBs90pWc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "5C8soop3wqIxok4/X4N+V+s3q7gTaebKxQGa3N1ssW8="
+        "CodeSha256": "GAVAcN6gZwkjGRAujfKXLaVZtDWpYdfgxAdDf8F6qyo="
       }
     },
     "ApiGatewayRestApi": {
@@ -244,7 +244,7 @@
             {
               "StatusCode": "200",
               "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Origin": "'http://localhost:5173,http://miranda-frontend.s3-website.eu-west-3.amazonaws.com'",
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
                 "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
               },
@@ -405,7 +405,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1747320292287": {
+    "ApiGatewayDeployment1747383156259": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -470,7 +470,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionybx6cUIlwBtvratojfXrK19q1ZE7urDGvxYOLdGEt8"
+        "Ref": "AppLambdaVersionFpcxVj2TvqoWMwJPNr4jf44nlthLCbzlBlLBs90pWc"
       },
       "Export": {
         "Name": "sls-miranda-backend-dev-AppLambdaFunctionQualifiedArn"
