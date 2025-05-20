@@ -6,7 +6,7 @@ import authRoutes from './routes/authRoutes';
 import contactRoutes from './routes/contactRoutes';
 import { authenticateToken } from './middleware/authMiddleware';
 import bookingRoutes from './routes/bookingRoutes';
-import { connectToMongo } from './database/mongoConnection';
+//import { connectToMongo } from './database/mongoConnection';
 import serverless from 'serverless-http';
 import cors from 'cors';
 
@@ -38,7 +38,7 @@ app.use('/api/users', authenticateToken, userRoutes);
 app.use('/api/bookings', authenticateToken, bookingRoutes);
 app.use('/api/contacts', authenticateToken, contactRoutes);
 
-connectToMongo();
+//connectToMongo();
 
 if(process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
