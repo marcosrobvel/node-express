@@ -40,10 +40,10 @@ app.use('/api/health', (_, res) => {
   res.status(200).json({ message: 'API is running' });
 });
 app.use('/api/auth', authRoutes);
-app.use('/rooms', authenticateToken, roomRoutes);
-app.use('/users', authenticateToken, userRoutes);
-app.use('/bookings', authenticateToken, bookingRoutes);
-app.use('/contacts', authenticateToken, contactRoutes);
+app.use('rooms', authenticateToken, roomRoutes);
+app.use('users', authenticateToken, userRoutes);
+app.use('bookings', authenticateToken, bookingRoutes);
+app.use('contacts', authenticateToken, contactRoutes);
 
 // DB
 connectToMongo();
